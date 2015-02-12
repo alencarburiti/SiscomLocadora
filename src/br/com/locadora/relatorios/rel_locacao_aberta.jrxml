@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_locacao_aberta" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3c87c63f-d40f-4d38-bee9-b08247c77c07">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+    C.CODIGO_LOCACAO,
+    D.CODIGO_ITEM_LOCACAO,
+    D.VALOR_LOCADO,
+    D.DATA_PREVISTA,
+    D.VALOR_PAGO,
+    E.CODIGO_DEPENDENTE,
+    E.NOME_DEPENDENTE,
+    A.TITULO AS TITULO,
+    F.DIAS AS DIARIA,
+    B.CODIGO_BARRAS,
+    B.CODIGO_COPIA,
+    F.MULTAS AS VALOR_MULTA_DIA,
+    F.CODIGO_DIARIA,
+    D.DATA_LOCACAO AS DATA_LOCACAO,
+    ADDDATE(D.DATA_LOCACAO, F.DIAS) AS DATA_DEVOLUCAO,
+    CURRENT_DATE AS DATA_ATUAL,
+    (CASE
+        WHEN ((DATEDIFF(CURDATE(), DATA_LOCACAO)) <= (DATEDIFF(DATA_PREVISTA, DATA_LOCACAO))) THEN 0
+        ELSE ((DATEDIFF(CURDATE(), DATA_LOCACAO)) - (DATEDIFF(DATA_PREVISTA, DATA_LOCACAO)))
+    END) AS DIAS_MULTA,
+    CASE
+        WHEN
+            (((DATEDIFF(CURDATE(), DATA_LOCACAO)) <= (DATEDIFF(DATA_PREVISTA, DATA_LOCACAO))) * F.MULTAS) IS NULL
+                OR (((DATEDIFF(CURDATE(), DATA_LOCACAO)) - (DATEDIFF(DATA_PREVISTA, DATA_LOCACAO))) * F.MULTAS < 0)
+        THEN
+            0
+        ELSE (((DATEDIFF(CURDATE(), DATA_LOCACAO)) - (DATEDIFF(DATA_PREVISTA, DATA_LOCACAO))) * F.MULTAS)
+    END AS VALOR_RELOCACAO
+FROM
+    OBJETO A,
+    COPIA B,
+    LOCACAO C,
+    ITEM_LOCACAO D,
+    DEPENDENTE E,
+    DIARIA F
+WHERE
+    A.CODIGO_OBJETO = B.OBJETO_CODIGO_OBJETO
+        AND C.DEPENDENTE_CODIGO_DEPENDENTE = E.CODIGO_DEPENDENTE
+        AND C.CODIGO_LOCACAO = D.LOCACAO_CODIGO_LOCACAO
+        AND D.COPIA_CODIGO_COPIA = B.CODIGO_COPIA
+        AND B.DIARIA_CODIGO_DIARIA = F.CODIGO_DIARIA
+        AND D.DEL_FLAG = 1
+        AND A.TIPO_MOVIMENTO = 'LOCACAO'
+        AND D.DATA_LOCACAO BETWEEN '2015-01-01' AND '2015-02-01'
+        AND A.TITULO LIKE '%'
+ORDER BY DATA_PREVISTA]]>
+	</queryString>
+	<field name="CODIGO_LOCACAO" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CODIGO_ITEM_LOCACAO" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VALOR_LOCADO" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DATA_PREVISTA" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VALOR_PAGO" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CODIGO_DEPENDENTE" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOME_DEPENDENTE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TITULO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DIARIA" class="java.lang.Integer"/>
+	<field name="CODIGO_BARRAS" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CODIGO_COPIA" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VALOR_MULTA_DIA" class="java.lang.Double"/>
+	<field name="CODIGO_DIARIA" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DATA_LOCACAO" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DATA_DEVOLUCAO" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DATA_ATUAL" class="java.sql.Date"/>
+	<field name="DIAS_MULTA" class="java.lang.Long"/>
+	<field name="VALOR_RELOCACAO" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="218" y="0" width="337" height="79" uuid="4277e904-462d-4aec-8cd8-596b989679d9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="14"/>
+				</textElement>
+				<text><![CDATA[Relatório de Locações Abertas]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="218" height="79" uuid="680badf0-a2ee-4227-ab26-71b4da7ffb8a"/>
+				<imageExpression><![CDATA["br/com/locadora/relatorios/logo.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="180" height="20" uuid="0a606b2a-a186-4c96-a2f9-100c2957b227"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<text><![CDATA[Cliente/Dependente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="0" width="188" height="20" uuid="07dd06bc-42ad-4844-931a-be68569ed93e"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<text><![CDATA[Objeto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="368" y="0" width="87" height="20" uuid="13e3d866-ae66-4c2a-9d4c-62be1a530188"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<text><![CDATA[Data Prevista]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="0" width="100" height="20" uuid="9f9ae139-442c-4f89-a33f-c55f165d9e31"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<text><![CDATA[Dias de Atraso]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="19" width="555" height="1" uuid="1c0d28e7-5219-4d5b-ba01-c533bcb29240"/>
+			</line>
+			<line>
+				<reportElement x="367" y="0" width="1" height="19" uuid="00a17fb2-6db3-4674-9cc3-89d9fb0df906"/>
+			</line>
+			<line>
+				<reportElement x="180" y="1" width="1" height="18" uuid="52d8b9e1-f28f-4ff8-b8ad-79df6708e6a9"/>
+			</line>
+			<line>
+				<reportElement x="454" y="1" width="1" height="18" uuid="d82df56a-8404-494b-89c8-1ce1d1090123"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="2" width="180" height="20" uuid="b72ae807-7788-4168-992b-a29716e365f5"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOME_DEPENDENTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="191" y="2" width="178" height="20" uuid="471e10d1-9f4f-4d20-9444-458766ee1723"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TITULO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="367" y="1" width="87" height="20" uuid="ce8989d9-23f0-45b6-a2e6-6a3c5f574bb2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATA_PREVISTA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="454" y="2" width="100" height="20" uuid="d9f9c431-d17a-45c6-87bb-3501f2469c45"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIAS_MULTA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="34" width="100" height="20" uuid="82e6f21e-552d-47e5-ac4f-bfeb8e086a32"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

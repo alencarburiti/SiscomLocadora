@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_fluxo_caixa_detalhado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8a738de3-f9d6-484e-8bd8-96afcc5454d3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+    DATA_VENCIMENTO,
+    CODIGO_LANCAMENTO_CONTA,
+    CODIGO_FORNECEDOR,
+    NOME_FANTASIA AS ORIGEM_DESTINO,
+    DESCRICAO,
+    DOCUMENTO,
+    VALOR_A_PAGAR,
+    VALOR_PAGO,
+    (CASE WHEN (VALOR_A_PAGAR - VALOR_PAGO) < 0 THEN 0 ELSE
+    VALOR_A_PAGAR - VALOR_PAGO END ) AS DEBITO,
+    DATA_PAGAMENTO,
+    C.NOME_USUARIO,
+    A.CAIXA_CODIGO_CAIXA, CATEGORIA_CODIGO_CATEGORIA
+FROM
+    locadora.lancamento_conta A,
+    FORNECEDOR B,
+    USUARIO C
+WHERE
+    A.FORNECEDOR_CODIGO_FORNECEDOR = B.CODIGO_FORNECEDOR
+        AND A.USUARIO_CODIGO_USUARIO = C.CODIGO_USUARIO
+        AND DATA_VENCIMENTO BETWEEN '2015-01-01' AND '2015-03-01'
+        AND DATA_PAGAMENTO IS NULL OR DATA_PAGAMENTO = '' order BY DATA_VENCIMENTO;]]>
+	</queryString>
+	<field name="DATA_VENCIMENTO" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CODIGO_LANCAMENTO_CONTA" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CODIGO_FORNECEDOR" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ORIGEM_DESTINO" class="java.lang.String"/>
+	<field name="DESCRICAO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DOCUMENTO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VALOR_A_PAGAR" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VALOR_PAGO" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DEBITO" class="java.lang.Double"/>
+	<field name="DATA_PAGAMENTO" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOME_USUARIO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CAIXA_CODIGO_CAIXA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CATEGORIA_CODIGO_CATEGORIA" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="somar_valor" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{DEBITO}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="218" height="79" uuid="cc8533e0-867f-41c2-8826-06b3d581e261"/>
+				<imageExpression><![CDATA["br/com/locadora/relatorios/logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="218" y="0" width="337" height="79" uuid="46a4ba6b-a525-49c5-b370-f9f1529eef62"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="14"/>
+				</textElement>
+				<text><![CDATA[Relatório de Contas À Pagar]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="336" y="1" width="78" height="20" uuid="cc8217e3-2821-4676-9d53-be4eb1007a12"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<text><![CDATA[Data Lançamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="175" height="20" uuid="011567cd-c93c-4eaf-941d-5e4abbcb269d"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<text><![CDATA[Fornecedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="414" y="0" width="75" height="20" uuid="86785fdc-6a8b-4e63-b448-c2b77ef2ec89"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="489" y="0" width="66" height="20" uuid="55782ca2-60b3-4b41-b472-952190afeebf"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<text><![CDATA[Usuário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="175" y="0" width="161" height="20" uuid="adb83d7d-7c65-43d3-9bac-22b9a2fa1462"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="336" y="0" width="78" height="20" uuid="427c245f-e6d7-4ddc-86d3-af474e79f6f2"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATA_VENCIMENTO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="414" y="0" width="75" height="20" uuid="f2bf5804-56c4-4eae-b539-db11b794b90b"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left">
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEBITO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="0" width="66" height="20" uuid="faa0ab6f-affb-4f16-939a-70b69d174362"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOME_USUARIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="175" height="20" uuid="ed8a83f2-980a-4739-8005-3f8afacea348"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ORIGEM_DESTINO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="175" y="0" width="161" height="20" uuid="a4a90ba1-7dd2-461f-ae5b-ca2626ece639"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRICAO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="480" y="25" width="75" height="20" uuid="18c4669c-cf9f-4b09-bcb2-f09101f32297"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="480" y="0" width="75" height="20" uuid="719193be-74e5-47d6-a1b5-4cf428505dab"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{somar_valor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_locacao_aberta" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3c87c63f-d40f-4d38-bee9-b08247c77c07">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+    CODIGO_OBJETO,
+    TITULO,
+    COUNT(CODIGO_ITEM_LOCACAO) AS QTD_LOCACAO,
+    SUM(VALOR_LOCADO) AS VALOR_LOCACAO,
+    SUM(DIAS_RELOCACAO) AS QTD_RELOCACAO,
+    SUM(VALOR_RELOCACAO) AS VALOR_RELOCACAO
+FROM
+    OBJETO A,
+    COPIA B,
+    ITEM_LOCACAO C
+WHERE
+    A.CODIGO_OBJETO = B.OBJETO_CODIGO_OBJETO
+        AND B.CODIGO_COPIA = C.COPIA_CODIGO_COPIA
+        AND DATA_LOCACAO BETWEEN '2014-12-01' AND '2015-12-31'
+	and titulo like "%%"
+GROUP BY 1,2;]]>
+	</queryString>
+	<field name="CODIGO_OBJETO" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TITULO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="QTD_LOCACAO" class="java.lang.Long"/>
+	<field name="VALOR_LOCACAO" class="java.lang.Double"/>
+	<field name="QTD_RELOCACAO" class="java.math.BigDecimal"/>
+	<field name="VALOR_RELOCACAO" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="218" y="0" width="584" height="79" uuid="4277e904-462d-4aec-8cd8-596b989679d9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="14"/>
+				</textElement>
+				<text><![CDATA[Relatório de Locações e Relocações]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="218" height="79" uuid="88865f9d-492e-4cf2-af5b-f960c1d4b459"/>
+				<imageExpression><![CDATA["br/com/locadora/relatorios/logo.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="100" y="0" width="235" height="20" uuid="07dd06bc-42ad-4844-931a-be68569ed93e"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<text><![CDATA[Objeto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="684" y="1" width="118" height="20" uuid="0d6d5e3b-6733-4b19-bb1b-33a58ed7805e"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<text><![CDATA[Valor Relocação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="567" y="1" width="118" height="20" uuid="5a702ad3-54e1-4671-b21c-ec1bcbdf4f05"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<text><![CDATA[Qtd. Relocação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="0" width="117" height="20" uuid="9f9ae139-442c-4f89-a33f-c55f165d9e31"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<text><![CDATA[Valor Locação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="0" width="116" height="20" uuid="13e3d866-ae66-4c2a-9d4c-62be1a530188"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<text><![CDATA[Qtd. Locação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="a4f9bb82-d21d-49be-a287-9536eaf89ded"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="684" y="0" width="118" height="20" uuid="7fe7b3f5-a9e3-4cbd-8829-0f754aaa1de5"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VALOR_RELOCACAO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="234" height="20" uuid="471e10d1-9f4f-4d20-9444-458766ee1723"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TITULO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="567" y="0" width="117" height="20" uuid="63666dbc-7a12-4ab9-9313-9ddfaf0191bf"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{QTD_RELOCACAO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="450" y="0" width="117" height="20" uuid="d9f9c431-d17a-45c6-87bb-3501f2469c45"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VALOR_LOCACAO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="334" y="0" width="116" height="20" uuid="ce8989d9-23f0-45b6-a2e6-6a3c5f574bb2"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{QTD_LOCACAO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="4519e139-1e8c-43a9-a87d-0c3a0db56ba8"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font fontName="Arial Narrow" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CODIGO_OBJETO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="34" width="100" height="20" uuid="82e6f21e-552d-47e5-ac4f-bfeb8e086a32"/>
+				<textElement>
+					<font fontName="Arial Narrow" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

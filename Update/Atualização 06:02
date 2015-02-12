@@ -1,0 +1,16 @@
+Atualização 06/02
+
+Criar tabela ocorrencia_danificado
+CREATE TABLE `ocorrencia_danificado` (
+  `codigo_ocorrencia_danificado` int(11) NOT NULL AUTO_INCREMENT,
+  `copia_codigo_copia` int(11) DEFAULT NULL,
+  `dependente_codigo_dependente` int(11) DEFAULT NULL,
+  `observacao` varchar(500) DEFAULT NULL,
+  `lancamento_codigo_lancamento` int(11) DEFAULT NULL,
+  PRIMARY KEY (`codigo_ocorrencia_danificado`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+Adicionar tipo de serviço
+C
+Crédito Ocorrência Danificado
+S
